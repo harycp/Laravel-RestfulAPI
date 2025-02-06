@@ -72,7 +72,9 @@
                                                 }
                                             }
                                         },
-                                        "errors": {}
+                                        "errors": {
+                                            "type": "object"
+                                        }
                                     }
                                 }
                             }
@@ -218,7 +220,9 @@
                                                 }
                                             }
                                         },
-                                        "errors": {}
+                                        "errors": {
+                                            "type": "object"
+                                        }
                                     }
                                 }
                             }
@@ -266,7 +270,9 @@
                                                 }
                                             }
                                         },
-                                        "errors": {}
+                                        "errors": {
+                                            "type": "object"
+                                        }
                                     }
                                 }
                             }
@@ -297,7 +303,9 @@
                                         "data": {
                                             "type": "boolean"
                                         },
-                                        "errors": {}
+                                        "errors": {
+                                            "type": "object"
+                                        }
                                     }
                                 }
                             }
