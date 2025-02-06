@@ -1,0 +1,34 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Contact API",
+        "description": "Contact API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "paths": {
+        "/api/contacts": {
+            "post": {
+                "description": "Create new contact"
+            },
+            "get": {
+                "description": "Search contact"
+            }
+        },
+        "/api/contacts/{id}": {
+            "put": {
+                "description": "Update contact"
+            },
+            "get": {
+                "description": "Get contact"
+            },
+            "delete": {
+                "description": "Delete contact"
+            }
+        }
+    }
+}
