@@ -19,7 +19,7 @@ class UserTest extends TestCase
             'name' => "Hary Capri"
         ];
 
-        $this->post('/api/users', $data)
+        $this->post('/api/users/register', $data)
             ->assertStatus(201)
             ->assertJson([
                 "data" => [
@@ -38,7 +38,7 @@ class UserTest extends TestCase
             'name' => ""
         ];
 
-        $this->post('/api/users', $data)
+        $this->post('/api/users/register', $data)
             ->assertStatus(400)
             ->assertJson([
                 "errors" => [
@@ -62,12 +62,68 @@ class UserTest extends TestCase
             'name' => "Hary Capri"
         ];
 
-        $this->post('/api/users', $data)
+        $this->post('/api/users/register', $data)
             ->assertStatus(400)
             ->assertJson([
                 "errors" => [
                     "username" => "username has already been taken"
                 ]
             ]);
+    }
+
+    public function testLoginSuccess()
+    {
+        $data = [
+            "username" => "haryc99",
+            "password" => "test123"
+        ];
+
+        $this->post('/api/users/login', $data)
+             ->assertStatus(200)
+             ->assertJson([
+                "data" => [
+                    "username" => "haryc99",
+                    "name" => "Hary Capri"
+                ]
+                ]);
+    }
+
+    public function testLoginFailed()
+    {
+        $data = [
+            'username' => "",
+            'password' => "",
+        ];
+
+        $this->post('/api/users/login', $data)
+            ->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "username" => ["The username field is required."],
+                        "password" => ["The password field is required."]
+                    ]
+                ]
+                    ]);
+           
+    }
+    public function testLoginFialedNotFound()
+    {
+        $data = [
+            'username' => "hary9",
+            'password' => "test123",
+        ];
+
+        $this->post('/api/users/login', $data)
+            ->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "username" => ["The username field is required."],
+                        "password" => ["The password field is required."]
+                    ]
+                ]
+                    ]);
+           
     }
 }

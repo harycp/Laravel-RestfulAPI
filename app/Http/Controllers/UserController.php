@@ -7,8 +7,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -29,7 +31,7 @@ class UserController extends Controller
         }
 
         $user = new User($data);
-        $user->password = Hash::make($data['password']);
+        $user->password = Hash::make($data['password']);    
         $user->save();
 
         return (new UserResource($user))->response()->setStatusCode(201);
@@ -40,10 +42,8 @@ class UserController extends Controller
         $data = $request->validated();
 
         $user = User::where('username', $data['username'])->first();
-        $pass_dec = Hash::make($data['password']);
-        $pass_user = $user->password;
 
-        if(!$user || ($pass_dec !== $pass_user)){
+        if(!$user || !Hash::check($data['password'], $user->password)){
             throw new HttpResponseException(response([
                 'errors' => [
                     "message" => "username or password is wrong"

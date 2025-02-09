@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserLoginRequest extends FormRequest
 {
@@ -24,7 +25,16 @@ class UserLoginRequest extends FormRequest
         return [
             'username' => ['required', 'max:100'],
             'password' => ['required', 'max:100'],
-            'token' => $this->token !== null,
+            'token' => $this->token !== null ? ['required'] : []
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new HttpResponseException(response([
+            'errors' => [
+                "message" => $validator->getMessageBag()   
+            ]     
+        ], 400));
     }
 }
