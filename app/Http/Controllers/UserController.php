@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\UserLoginRequest;
@@ -55,6 +56,12 @@ class UserController extends Controller
         $user->save();
 
         return new UserResource($user);
-        
+    }
+
+    public function get(Request $request): UserResource
+    {
+        $user = Auth::user();
+        return new UserResource($user);
+
     }
 }

@@ -126,4 +126,43 @@ class UserTest extends TestCase
                     ]);
            
     }
+
+    public function testGetSuccess()
+    {
+        $this->get('/api/users/current', [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "username" => "haryc99",
+                    "name" => "Hary Capri"
+                ]
+                ]);
+    }
+    public function testTokenUnauthorized()
+    {
+        $this->get('/api/users/current')
+           ->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
+                    ]
+                ]
+                    ]);
+    }
+    public function testTokenInvalid()
+    {
+        $this->get('/api/users/current', [
+            "Authorization" => "Slebew"
+        ])
+           ->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
+                    ]
+                ]
+                ]);
+    }
 }

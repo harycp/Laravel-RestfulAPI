@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
@@ -18,7 +19,8 @@ class UserSeeder extends Seeder
         User::create([
             "username" => "haryc99",
             "password" => Hash::make("test123"),
-            "name" => "Hary Capri"
+            "name" => "Hary Capri",
+            "token" => Str::uuid(),
         ]);
     }
 }
