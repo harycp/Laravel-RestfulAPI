@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
@@ -63,5 +64,34 @@ class UserController extends Controller
         $user = Auth::user();
         return new UserResource($user);
 
+    }
+
+    public function update(UserUpdateRequest $request): UserResource
+    {
+        $data = $request->validated();
+        $user = Auth::user();
+
+        if(isset($data['username'])){
+            $isExist = User::where('username', $data['username'])
+                    ->where('id', '!=', $user->id)->exists();
+
+            if($isExist){
+                throw new HttpResponseException(response([
+                    "errors" => [
+                        "message" => "username has been taken already"
+                    ]
+                ], 422));
+            }
+
+            $user->username = $data['username'];
+
+        }
+
+        if(isset($data['name'])) $user->name = $data['name'];
+        if(isset($data['password'])) $user->password = Hash::make($data['password']);
+
+        $user->save();
+
+        return new UserResource($user);
     }
 }

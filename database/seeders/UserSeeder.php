@@ -20,7 +20,14 @@ class UserSeeder extends Seeder
             "username" => "haryc99",
             "password" => Hash::make("test123"),
             "name" => "Hary Capri",
-            "token" => Str::uuid(),
+            "token" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76",
+        ]);
+
+        User::create([
+            "username" => "Bajigur48",
+            "password" => Hash::make("test123"),
+            "name" => "Hary Capri",
+            "token" => "ff6c8f47-7a0c-uui2-bd89-e19c6de3ce76",
         ]);
     }
 }

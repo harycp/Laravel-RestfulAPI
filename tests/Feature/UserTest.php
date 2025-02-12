@@ -165,4 +165,55 @@ class UserTest extends TestCase
                 ]
                 ]);
     }
+
+    public function testUpateName(){
+        $data = [
+            "name" => "Hartorejo"
+        ];
+
+        $this->patch('/api/users/current', $data, [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+        ->assertJson([
+            "data" => [
+                "username" => "har2204",
+                "name" => "Hartorejo"
+            ]
+            ]);
+    }
+    public function testUpatePassword(){
+        $data = [
+            "password" => "TestBros11"
+        ];
+
+        // old : $2y$12$9EgY5DnRsnRoBJh8HprcsONDzGNHG7jDgxLSzSXu88DJzioTNBidu
+
+        $this->patch('/api/users/current', $data, [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+        ->assertJson([
+            "data" => [
+                "username" => "har2204",
+                "name" => "Hartorejo"
+            ]
+            ]);
+
+         // new : $2y$04$WNP5S1bZpjZWYxHWXl0kKeB/P..g3wnMvRrQt0mKwTy5eZCBsaHhS
+    }
+
+    public function testUpateFailed(){
+        $data = [
+            "username" => "Bajigur48"
+        ];
+
+        $this->patch('/api/users/current', $data, [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(422)
+        ->assertJson([
+                "errors" => [
+                    "message" => "username has been taken already"
+                ]
+            ]);
+
+    }
 }

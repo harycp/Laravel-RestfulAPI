@@ -17,7 +17,6 @@ class ApiAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         $token = $request->header('Authorization');
         $authenticate = true;
 
@@ -27,7 +26,6 @@ class ApiAuthMiddleware
         if(!$user) $authenticate = false;
         else Auth::login($user);
 
-
         if($authenticate) return $next($request);
         else return response()->json([
             "errors" => [
@@ -36,6 +34,5 @@ class ApiAuthMiddleware
                     ]
                 ]
             ])->setStatusCode(401);
-        
     }
 }
