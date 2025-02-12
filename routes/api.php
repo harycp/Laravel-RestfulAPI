@@ -15,4 +15,5 @@ Route::post('/users/login', [UserController::class, 'login'])->name('login user'
 Route::middleware(ApiAuthMiddleware::class)->group(function(){
     Route::get('/users/current', [UserController::class, 'get'])->name("get user");
     Route::patch('/users/current', [UserController::class, 'update'])->name('update user');
+    Route::delete('/users/logout', [UserController::class, 'logout'])->name('logout user');
 });

@@ -216,4 +216,27 @@ class UserTest extends TestCase
             ]);
 
     }
+
+    public function testLogoutSuccess()
+    {
+        $this->delete('/api/users/logout', headers:[
+            'Authorization' => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+        ->assertJson([
+            "data" => true
+        ]);
+    }
+    public function testLogoutFailed()
+    {
+        $this->delete('/api/users/logout', headers:[
+            'Authorization' => "ff6c8f47-7a0c-4abd-bd89-e16"
+        ])->assertStatus(401)
+        ->assertJson([
+            "errors" => [
+                "message" => [
+                    "unauthorized"
+                ]
+            ]
+        ]);
+    }
 }
