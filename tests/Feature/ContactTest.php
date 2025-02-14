@@ -81,4 +81,19 @@ class ContactTest extends TestCase
             ]
         ]);
     }
+
+    public function testUpdateSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+        $data = [
+            "first_name" => "Ucup",
+            "last_name" => "Baba",
+            "email" => "baba@gmail.com",
+            "phone" => "08952321242"
+        ];
+
+        $this->patch('/api/contacts/' . $contact->id, $data, [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200);
+    }
 }
