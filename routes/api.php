@@ -20,4 +20,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function(){
 
 
     Route::post('/contacts', [ContactController::class, 'create'])->name('create contact');
+    Route::get('/contacts/{id}', [ContactController::class, 'get'])->where('id', '[0-9]+')->name('get contacts');
 });
