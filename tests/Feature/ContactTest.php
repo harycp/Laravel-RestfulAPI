@@ -96,4 +96,13 @@ class ContactTest extends TestCase
             "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
         ])->assertStatus(200);
     }
+
+    public function testDeleteSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+
+        $this->delete(uri: '/api/contacts/' . $contact->id, headers: [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200);
+    }
 }

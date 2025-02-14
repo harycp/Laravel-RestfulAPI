@@ -22,4 +22,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function(){
     Route::post('/contacts', [ContactController::class, 'create'])->name('create contact');
     Route::get('/contacts/{id}', [ContactController::class, 'get'])->where('id', '[0-9]+')->name('get contacts');
     Route::patch('/contacts/{id}', [ContactController::class, 'update'])->where('id', '[0-9]+')->name('update contact');
+    Route::delete('/contacts/{id}', [ContactController::class, 'remove'])->where('id', '[0-9]+')->name('delete contact');
 });
