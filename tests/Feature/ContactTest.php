@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Contact;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -49,5 +50,35 @@ class ContactTest extends TestCase
                 ]
             ]
             ]);
+    }
+
+    public function testGetSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+
+        $this->get('/api/contacts/'. $contact->id, [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+        ->assertJson([
+            "data" => [
+                "first_name" => "Hary",
+                "last_name" => "Capri",
+                "email" => "omegahary88@gmail.com",
+                "phone" => "08982232323"
+            ]
+        ]);
+    }
+    public function testGetFailed()
+    {
+        $contact = Contact::query()->limit(1)->first();
+
+        $this->get('/api/contacts/5', [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(400)
+        ->assertJson([
+            "errors" => [
+                "message" => "Not found contact"
+            ]
+        ]);
     }
 }

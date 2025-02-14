@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ContactSeeder extends Seeder
 {
@@ -12,6 +14,23 @@ class ContactSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $user_1 = User::where('id', 1)->first();
+        $user_2 = User::where('id', 2)->first();
+
+        Contact::create([
+            "first_name" => "Hary",
+            "last_name" => "Capri",
+            "email" => "omegahary88@gmail.com",
+            "phone" => "08982232323",
+            "user_id" => $user_1->id
+        ]);
+
+        Contact::create([
+            "first_name" => "Cepak",
+            "last_name" => "Tebek",
+            "email" => "tebakceb88@gmail.com",
+            "phone" => "08982032323",
+            "user_id" => $user_2->id
+        ]);
     }
 }
