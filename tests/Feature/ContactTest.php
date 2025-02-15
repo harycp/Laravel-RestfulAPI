@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Contact;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class ContactTest extends TestCase
@@ -104,5 +105,28 @@ class ContactTest extends TestCase
         $this->delete(uri: '/api/contacts/' . $contact->id, headers: [
             "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
         ])->assertStatus(200);
+    }
+
+    public function testSearchFirstName()
+    {
+        $contacts = $this->get('/api/contacts?name=hary', [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)->json();
+
+        Log::info(json_encode($contacts, JSON_PRETTY_PRINT));
+
+        self::assertEquals(10, count($contacts['data'])); 
+        self::assertEquals(11, $contacts['meta']['total']); 
+    }
+    public function testSearchPage()
+    {
+        $contacts = $this->get('/api/contacts?name=hary&page=2', [
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)->json();
+
+        Log::info(json_encode($contacts, JSON_PRETTY_PRINT));
+
+        self::assertEquals(1, count($contacts['data'])); 
+        self::assertEquals(11, $contacts['meta']['total']); 
     }
 }

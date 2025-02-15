@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ContactResouce;
+use App\Http\Resources\ContactCollection;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\ContactCreateRequest;
 use App\Http\Requests\ContactUpdateRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -85,5 +87,40 @@ class ContactController extends Controller
         return response()->json([
             "data" => true
         ], 200);
+    }
+    public function search(Request $request): ContactCollection
+    {
+        $user = Auth::user();
+        
+        $size = $request->input('size', 10);
+
+        $contacts = Contact::where('user_id', $user->id);
+
+        $contacts = $contacts->where(function(Builder $builder) use ($request){
+            $name = $request->input('name');
+            if($name) {
+                $builder->where(function(Builder $builder) use ($name) {
+                    $builder->orWhere('first_name', 'like', '%'. $name . '%');
+                    $builder->orWhere('last_name', 'like', '%' . $name . '%');
+                });
+            }
+
+            $email = $request->input('email');
+            if($email) {
+                $builder->where(function(Builder $builder) use ($email) {
+                    $builder->orWhere('email', 'like', '%' . $email . '%');
+                });
+            }
+
+            $phone = $request->input('phone');
+            if($phone) {
+                $builder->where(function(Builder $builder) use ($phone) {
+                    $builder->orWhere('phone', 'like', '%' . $phone . '%');
+                });
+            }
+        })->paginate($size);
+
+        return new ContactCollection($contacts);
+
     }
 }

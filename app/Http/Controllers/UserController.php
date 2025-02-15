@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UserRegisterRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller

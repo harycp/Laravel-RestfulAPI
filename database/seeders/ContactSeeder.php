@@ -32,5 +32,15 @@ class ContactSeeder extends Seeder
             "phone" => "08982032323",
             "user_id" => $user_2->id
         ]);
+
+        for($i = 0; $i <= 10; $i++){
+            Contact::create([
+                "first_name" => "hary" . $i,
+                "last_name" => "belakang" . $i,
+                "email" => "email" . $i . ".com",
+                "phone" => "08957292" . $i,
+                "user_id" => $user_1->id
+            ]);
+        }
     }
 }
