@@ -92,4 +92,20 @@ class AddressTest extends TestCase
         Log::info(json_encode($response));
         self::assertNotEquals($address, $response);
     }
+
+    public function testDeleteAddressSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+        $address = Address::where('contact_id', $contact->id)->first();
+        Log::info(json_encode($address));
+
+        Log::info("User: " . json_encode(Auth::user()));
+
+        $response = $this->delete('/api/contacts/' . $contact->id . '/addresses/' . $address->id,  headers:[
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200)
+        ->assertJson([
+            "data" => true
+        ]);
+    }
 }

@@ -103,4 +103,38 @@ class AddressController extends Controller
         }
       
     }
+
+    public function delete(int $idContact, int $idAddress, AddressUpdateRequest $request): JsonResponse
+    {
+        try{
+            $user = Auth::user();
+            $contact = Contact::where('id', $idContact)->where('user_id', $user->id)->first();
+    
+            if(!$contact) {
+                throw new HttpResponseException(response([
+                    'errors' => [
+                        "message" => "Not found contact"
+                    ]
+                ], 400));
+            }
+    
+            $address = Address::where('id', $idAddress)->where('contact_id', $contact->id)->first();
+            if(!$address) {
+                throw new HttpResponseException(response([
+                    'errors' => [
+                        "message" => "Not found address"
+                    ]
+                ], 400));
+            }
+    
+            $address->delete();
+    
+            return response()->json([
+                "data" => true
+            ], 200);
+        }catch(\Exception $e){
+            Log::info($e);
+        }
+      
+    }
 }
