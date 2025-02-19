@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AddressCreateRequest;
+use App\Http\Requests\AddressUpdateRequest;
 use App\Models\Address;
+use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class AddressController extends Controller
 {
@@ -58,5 +62,45 @@ class AddressController extends Controller
         }
 
         return new AddressResource($address);
+    }
+
+    public function update(int $idContact, int $idAddress, AddressUpdateRequest $request): AddressResource
+    {
+        try{
+            Log::info("hayy");
+            $user = Auth::user();
+            $contact = Contact::where('id', $idContact)->where('user_id', $user->id)->first();
+            $data = $request->validated();
+    
+            if(!$contact) {
+                throw new HttpResponseException(response([
+                    'errors' => [
+                        "message" => "Not found contact"
+                    ]
+                ], 400));
+            }
+    
+            $address = Address::where('id', $idAddress)->where('contact_id', $contact->id)->first();
+            if(!$address) {
+                throw new HttpResponseException(response([
+                    'errors' => [
+                        "message" => "Not found address"
+                    ]
+                ], 400));
+            }
+    
+            if(isset($data['street'])) $address->street = $data['street'];
+            if(isset($data['city'])) $address->city = $data['city'];
+            if(isset($data['province'])) $address->province = $data['province'];
+            if(isset($data['country'])) $address->country = $data['country'];
+            if(isset($data['postal_code'])) $address->postal_code = $data['postal_code'];
+    
+            $address->save();
+    
+            return new AddressResource($address);
+        }catch(\Exception $e){
+            Log::info($e);
+        }
+      
     }
 }

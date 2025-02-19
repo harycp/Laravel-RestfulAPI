@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Address;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,7 +17,7 @@ class AddressTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $data = [
-            "street" => "Jl. Semangka 1",
+            "street" => "Jl. Semangka 2",
             "city" => "Bekasi",
             "province" => "Jawa Barat",
             "country" => "Indonesia",
@@ -65,5 +66,30 @@ class AddressTest extends TestCase
                 "message" => "Not found address"
             ]
         ]);
+    }
+
+    public function testUpdateAddressSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+        $address = Address::where('contact_id', $contact->id)->first();
+
+        Log::info("User: " . json_encode(Auth::user()));
+
+
+        Log::info(json_encode($address));
+        $data = [
+            "street" => "Jl Jl Jl Mantap",
+            "city" => "Piyungan",
+            "province" => "Jawa Barat",
+            "country" => "Indonesia",
+            "postal_code" => "17220"
+        ];
+
+        $response = $this->put('/api/contacts/' . $contact->id . '/addresses/' . $address->id,  data: $data, headers:[
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+        ])->assertStatus(200);
+
+        Log::info(json_encode($response));
+        self::assertNotEquals($address, $response);
     }
 }

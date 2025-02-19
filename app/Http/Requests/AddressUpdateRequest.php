@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddressCreateRequest extends FormRequest
+class AddressUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class AddressCreateRequest extends FormRequest
             "street" => ["nullable", "max:200"],
             "city" => ["nullable", "max:100"],
             "province" => ["nullable", "max:100"],
-            "country" => ["required", "max:100"],
+            "country" => ["nullable", "max:100"],
             "postal_code" => ["nullable", "max:10"]
         ];
     }
