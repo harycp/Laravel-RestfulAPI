@@ -31,4 +31,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function(){
     Route::get('/contacts/{idContact}/addresses/{idAddress}', [AddressController::class, 'get'])->where('idContact', '[0-9]+')->where('idAddress', '[0-9]+')->name('get address');
     Route::put('/contacts/{idContact}/addresses/{idAddress}', [AddressController::class, 'update'])->where('idContact', '[0-9]+')->where('idAddress', '[0-9]+')->name('update address');
     Route::delete('/contacts/{idContact}/addresses/{idAddress}', [AddressController::class, 'delete'])->where('idContact', '[0-9]+')->where('idAddress', '[0-9]+')->name('delete address');
+    Route::get('/contacts/{idContact}/addresses/', [AddressController::class, 'getList'])->where('idContact', '[0-9]+')->name('get list address');
 });

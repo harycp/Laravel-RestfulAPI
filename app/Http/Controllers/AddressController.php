@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AddressCreateRequest;
 use App\Http\Requests\AddressUpdateRequest;
+use App\Http\Resources\AddressCollection;
 use App\Models\Address;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -135,6 +136,23 @@ class AddressController extends Controller
         }catch(\Exception $e){
             Log::info($e);
         }
-      
+    }
+
+    public function getList(int $idContact): AddressCollection
+    {
+        $user = Auth::user();
+        $contact = Contact::where('id', $idContact)->where('user_id', $user->id)->first();
+
+        if(!$contact) {
+            throw new HttpResponseException(response([
+                'errors' => [
+                    "message" => "Not found contact"
+                ]
+            ], 400));
+        }
+
+        $address = Address::where('contact_id', $idContact)->get();
+
+        return new AddressCollection($address);
     }
 }

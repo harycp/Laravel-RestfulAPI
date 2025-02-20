@@ -98,14 +98,25 @@ class AddressTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
         $address = Address::where('contact_id', $contact->id)->first();
         Log::info(json_encode($address));
-
+        
         Log::info("User: " . json_encode(Auth::user()));
-
-        $response = $this->delete('/api/contacts/' . $contact->id . '/addresses/' . $address->id,  headers:[
+        
+        $this->delete('/api/contacts/' . $contact->id . '/addresses/' . $address->id,  headers:[
             "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
-        ])->assertStatus(200)
+            ])->assertStatus(200)
         ->assertJson([
             "data" => true
         ]);
+    }
+    
+    public function testGetListAddressSuccess()
+    {
+        $contact = Contact::query()->limit(1)->first();
+
+        $response = $this->get('/api/contacts/' . $contact->id . '/addresses',  headers:[
+            "Authorization" => "ff6c8f47-7a0c-4abd-bd89-e19c6de3ce76"
+            ])->assertStatus(200);
+
+        self::assertNotNull($response);
     }
 }
